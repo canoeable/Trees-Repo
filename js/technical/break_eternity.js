@@ -2591,7 +2591,6 @@ for (var i = 0; i < 10; ++i)
       height = Math.trunc(height);
       var fracheight = oldheight-height;
       
-      //I have no idea if this is a meaningful approximation for pentation to continuous heights, but it is monotonic and continuous.
       if (fracheight !== 0)
       {
         if (payload.eq(Decimal.dOne))

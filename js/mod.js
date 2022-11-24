@@ -1,13 +1,13 @@
 let modInfo = {
-	name: "The ??? Tree",
-	id: "mymod",
-	author: "nobody",
+	name: "The Data Tree",
+	id: "sdffjjdfhhischvfsxchbgvfsdhbfgsdufhasdhjfbsdezoihfhadf",
+	author: "not-h4re",
 	pointsName: "points",
 	modFiles: ["layers.js", "tree.js"],
 
 	discordName: "",
 	discordLink: "",
-	initialStartPoints: new Decimal (10), // Used for hard resets and new players
+	initialStartPoints: new Decimal (0), // Used for hard resets and new players
 	offlineLimit: 1,  // In hours
 }
 
@@ -43,6 +43,9 @@ function getPointGen() {
 		return new Decimal(0)
 
 	let gain = new Decimal(1)
+	if(hasAchievement('ach', 21)) gain = gain.mul(3)
+	if(hasUpgrade('by', 12)) gain = gain.mul(3)
+	if(player.by.best.gte(1)) gain = gain.mul(tmp.by.effect)
 	return gain
 }
 
@@ -76,4 +79,11 @@ function maxTickLength() {
 // Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
 // you can cap their current resources with this.
 function fixOldSave(oldVersion){
+}
+
+//Does text colouring for me! (not my code)
+function layerText(layer, text, tag='h2') { return `<${tag} style='color:${temp[layer].color};text-shadow:${temp[layer].color} 0px 0px 10px;'>${text}</${tag}>` }
+
+function D(x){
+	return new Decimal(x)
 }
