@@ -1,26 +1,26 @@
 let modInfo = {
 	name: "The Data Tree",
-	id: "sdffjjdfhhischvfsxchbgvfsdhbfgsdufhasdhjfbsdezoihfhadf",
-	author: "not-h4re",
+	id: "mymodfshfskjfhshfdsfhdsfsdfihusijdfsihjnsdfsdihjfsdfsfsdfoisjfsddfoussdfuhsdiufsdfiusfjjdd",
+	author: "nobody",
 	pointsName: "points",
 	modFiles: ["layers.js", "tree.js"],
 
 	discordName: "",
 	discordLink: "",
-	initialStartPoints: new Decimal (0), // Used for hard resets and new players
-	offlineLimit: 1,  // In hours
+	initialStartPoints: new Decimal (10), // Used for hard resets and new players
+	offlineLimit: 0,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0",
-	name: "Literally nothing",
+	num: "1.0",
+	name: "release",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+	<h3>v1.0</h3><br>
+		- game made.<br>
+		- endgame: 100 kilobytes.`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
@@ -34,7 +34,7 @@ function getStartPoints(){
 
 // Determines if it should show points/sec
 function canGenPoints(){
-	return true
+	return hasUpgrade('b', 11)
 }
 
 // Calculate points/sec!
@@ -42,10 +42,12 @@ function getPointGen() {
 	if(!canGenPoints())
 		return new Decimal(0)
 
-	let gain = new Decimal(1)
-	if(hasAchievement('ach', 21)) gain = gain.mul(3)
-	if(hasUpgrade('by', 12)) gain = gain.mul(3)
-	if(player.by.best.gte(1)) gain = gain.mul(tmp.by.effect)
+	let gain = new Decimal(1.111111)
+	if(hasUpgrade('b', 12)) gain = gain.mul(upgradeEffect('b', 12))
+	if(hasUpgrade('b', 32)) gain = gain.mul(upgradeEffect('b', 32))
+	gain = gain.mul(buyableEffect('b', 11))
+	if(hasMilestone('unl', 3)) gain = gain.mul(1.5)
+	gain = gain.mul(buyableEffect('kb', 11))
 	return gain
 }
 
@@ -59,7 +61,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e280000000"))
+	return player.kb.points.gte(100)
 }
 
 
@@ -81,9 +83,29 @@ function maxTickLength() {
 function fixOldSave(oldVersion){
 }
 
-//Does text colouring for me! (not my code)
 function layerText(layer, text, tag='h2') { return `<${tag} style='color:${temp[layer].color};text-shadow:${temp[layer].color} 0px 0px 10px;'>${text}</${tag}>` }
 
-function D(x){
-	return new Decimal(x)
+function D(x) {return new Decimal(x)}
+
+function createMilestone(req, effect, done) { return {
+	requirementDescription: req,
+	effectDescription: effect,
+	done() {return done}
+}}
+
+function formatData(num, precision=3) {
+	let suffix = [null, "B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"]
+}
+
+function numHex(s)
+{
+    var a = s.toString(16);
+    if ((a.length % 2) > 0) {
+        a = "0" + a;
+    }
+    return "#"+a;
+}
+
+function calcNumToHex(m, a) {
+	return Math.floor(16777216 * (a / m))
 }
