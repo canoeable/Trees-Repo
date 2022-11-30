@@ -137,8 +137,8 @@ addLayer("b", {
     buyables: {
         11: {
             cost() {return D(1).mul(getBuyableAmount(this.layer, this.id).add(1))},
-            display() {return "("+formatWhole(getBuyableAmount(this.layer, this.id))+"/100)<br><h3>Generic Buyable</h3><br>+10% points<br>Cost: "+format(this.cost())+" bytes<br>Currently: "+format(buyableEffect(this.layer, this.id))+"x"},
-            effect() {return D(1).add(D(0.1).mul(getBuyableAmount(this.layer, this.id))).mul(buyableEffect('b', 12))},
+            display() {return "("+formatWhole(getBuyableAmount(this.layer, this.id).add(tmp['b'].buyables[11].bonus))+"/"+formatWhole(D(100).add(tmp['b'].buyables[11].bonus))+")<br><h3>Generic Buyable</h3><br>+10% points<br>Cost: "+format(this.cost())+" bytes<br>Currently: "+format(buyableEffect(this.layer, this.id))+"x"},
+            effect() {return D(1).add(D(0.1).mul(getBuyableAmount(this.layer, this.id).add(tmp['b'].buyables[11].bonus))).mul(buyableEffect('b', 12))},
             canAfford() {return player.b.points.gte(this.cost())},
             buy() {if(!hasMilestone('unl', 1)){player[this.layer].points = player[this.layer].points.sub(this.cost())}; setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))},
             style: {
@@ -147,6 +147,11 @@ addLayer("b", {
             },
             unlocked() {return hasUpgrade('b', 15)},
             purchaseLimit: 100,
+            bonus() {
+                let bonus = D(0)
+                if(hasUpgrade('kb', 13)) bonus = bonus.add(upgradeEffect('kb', 13))
+                return bonus
+            },
         },
         12: {
             cost(x) {return D(1.12).pow(x || getBuyableAmount(this.layer, this.id)).div(upgradeEffect('b', 25))},
@@ -279,6 +284,13 @@ addLayer("kb", {
             title: "useful upgradeTM",
             description: "You start with 3e25 bytes on reset.",
             cost: D(25),
+        },
+        13: {
+            title: "free! (buyable levels)",
+            description: "Gain more <b>Generic Buyable</b> levels based on kilobytes.",
+            cost: D(50),
+            effect() {return player.kb.points.floor().mul(50).min(4900)},
+            effectDisplay() {return `+${formatWhole(upgradeEffect(this.layer, this.id))} levels`},
         },
     },
     buyables: {
