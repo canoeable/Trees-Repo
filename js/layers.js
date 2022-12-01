@@ -154,8 +154,8 @@ addLayer("b", {
             canAfford() {return player.b.points.gte(this.cost())},
             buy() {if(!hasMilestone('unl', 1)){player[this.layer].points = player[this.layer].points.sub(this.cost())}; setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))},
             style: {
-                "height": "125px",
-                "width": "125px"
+                "height": "120px",
+                "width": "120px"
             },
             unlocked() {return hasUpgrade('b', 15)},
             purchaseLimit: 100,
@@ -182,8 +182,8 @@ addLayer("b", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(1000))
             },
             style: {
-                "height": "125px",
-                "width": "125px"
+                "height": "120px",
+                "width": "120px"
             },
             unlocked() {return hasUpgrade('b', 15)},
             purchaseLimit: 1000,
@@ -205,8 +205,8 @@ addLayer("b", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(1000))
             },
             style: {
-                "height": "125px",
-                "width": "125px"
+                "height": "120px",
+                "width": "120px"
             },
             unlocked() {return hasUpgrade('b', 24)},
             purchaseLimit: 1000,
@@ -249,7 +249,7 @@ addLayer("b", {
                 buyBuyable('b', 12)
                 buyBuyable('b', 13)
             },
-            canClick() {return hasMilestone('unl', 1)},
+            canClick() {return hasUpgrade('b', 15)},
         }
     },
     tabFormat: [
@@ -339,8 +339,8 @@ addLayer("kb", {
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(1000))
             },
             style: {
-                "height": "125px",
-                "width": "125px"
+                "height": "120px",
+                "width": "120px"
             },
             unlocked() {return hasUpgrade('kb', 11)},
             purchaseLimit: 10,
@@ -362,8 +362,8 @@ addLayer("kb", {
                 addBuyables(this.layer, this.id, max)
             },
             style: {
-                "height": "125px",
-                "width": "125px"
+                "height": "120px",
+                "width": "120px"
             },
             unlocked() {return hasUpgrade('kb', 11)},
             purchaseLimit: 8,

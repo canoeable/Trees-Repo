@@ -1,7 +1,7 @@
 let modInfo = {
 	name: "The Data Tree",
-	id: "mymodfshfskjfhshfdsfhdsfsdfihusijdfsihjnsdfsdihjfsdfsfsdfoisjfsddfoussdfuhsdiufsdfiusfjjdd",
-	author: "nobody",
+	id: "TheDataTree",
+	author: "not-h4re",
 	pointsName: "points",
 	modFiles: ["layers.js", "tree.js"],
 
@@ -19,8 +19,8 @@ let VERSION = {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.0</h3><br>
-		- game made.<br>
-		- endgame: 333 kilobytes.`
+		- Made the game.<br>
+		- endgame: 10,101 kilobytes.`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
@@ -61,7 +61,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.kb.points.gte(333)
+	return player.kb.points.gte(10101)
 }
 
 
