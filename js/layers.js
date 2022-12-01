@@ -404,7 +404,7 @@ addLayer("unl", {
         1: {
             requirementDescription: "50 bytes",
             effectDescription: "B buyables are free",
-            done() {return player.b.points.gte(50)}
+            done() {return player.b.points.gte(50) && hasUpgrade('b', 21)}
         },
         2: {
             requirementDescription: "450 B buyable levels",
