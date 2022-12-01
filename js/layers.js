@@ -51,14 +51,20 @@ addLayer("b", {
             title: "generic upgrade booster",
             description: "The previous upgrade is boosted based on bytes.",
             cost: D(3),
-            effect() {return player.b.points.add(1).pow(0.4).add(1)},
+            effect() {
+                let eff = player.b.points.add(1).pow(0.4).add(1)
+                return eff
+            },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+"x"},
         },
         14: {
             title: "generic upgrade two",
             description: "Gain more bytes based on points.",
             cost: D(16),
-            effect() {return player.points.add(1).log10().cbrt().add(1)},
+            effect() {
+                let eff = player.points.add(1).log10().cbrt().add(1)
+                return eff
+            },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+"x"},
         },
         15: {
@@ -75,14 +81,20 @@ addLayer("b", {
             title: "g e n e r i c  u p g r a d e",
             description: "<b>Generic Buyable</b> also boosts bytes, at a reduced rate.",
             cost: D(2500),
-            effect() {return buyableEffect('b', 11).pow(0.8)},
+            effect() {
+                let eff = buyableEffect('b', 11).pow(0.8)
+                return eff
+            },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+"x"},
         },
         23: {
             title: "this upgrade is very generic",
             description: "Bytes Upgrades boost bytes",
             cost: D(100000),
-            effect() {return D(player.b.upgrades.length).add(1)},
+            effect() {
+                let eff = D(player.b.upgrades.length).add(1)
+                return eff
+            },
             effectDisplay() {return format(upgradeEffect(this.layer, this.id))+"x"},
         },
         24: {
@@ -208,6 +220,7 @@ addLayer("b", {
         }
         //if(getBuyableAmount('b', 12).gte(1000)) setBuyableAmount('b', 12, D(1000))
         //if(getBuyableAmount('b', 13).gte(1000)) setBuyableAmount('b', 13, D(1000))
+        if(hasMilestone('unl', 2) && player.b.points.gte(101)) setBuyableAmount('b', 11, D(100))
     },
     passiveGeneration() {
         if(hasMilestone('unl', 5)) return 1
@@ -218,8 +231,10 @@ addLayer("b", {
         let keepcurrency = D(0)
         if(hasUpgrade('kb', 11)) keepcurrency = D(1024)
         if(hasUpgrade('kb', 12)) keepcurrency = D(3e25)
+        if(hasUpgrade('kb', 14)) keepcurrency = D(2.6e29)
         layerDataReset(this.layer, keep)
         if(keepcurrency.gte(1)) addPoints('b', keepcurrency)
+        if(hasMilestone('unl', 6)) player.b.upgrades = [11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 31, 32, 33]
     },
     clickables: {
         1: {
@@ -244,7 +259,7 @@ addLayer("b", {
         ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["clickable", 1]]],
         "upgrades"
     ],
-    autoUpgrade() {return hasMilestone('unl', 6)}
+    //autoUpgrade() {return hasMilestone('unl', 6)}
 })
 
 addLayer("kb", {
@@ -256,7 +271,10 @@ addLayer("kb", {
 		points: new Decimal(0),
     }},
     color: "#a155f2",
-    requires: new Decimal('2.5e29'), // Can be a function that takes requirement increases into account
+    requires() {
+        if(player.kb.points.lt(10000)) return new Decimal('2.5e29')
+        else return new Decimal('2.5e31')
+    }, // Can be a function that takes requirement increases into account
     resource: "kilobytes", // Name of prestige currency
     baseResource: "bytes", // Name of resource prestige is based on
     baseAmount() {return player.b.points}, // Get the current amount of baseResource
@@ -264,6 +282,7 @@ addLayer("kb", {
     exponent: 0.07, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
+        mult = mult.mul(buyableEffect('kb', 12))
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -289,8 +308,17 @@ addLayer("kb", {
             title: "free! (buyable levels)",
             description: "Gain more <b>Generic Buyable</b> levels based on kilobytes.",
             cost: D(50),
-            effect() {return player.kb.points.floor().mul(50).min(4900)},
+            effect() {
+                let eff = player.kb.points.floor().mul(50)
+                eff = eff.min(4900)
+                return eff
+            },
             effectDisplay() {return `+${formatWhole(upgradeEffect(this.layer, this.id))} levels`},
+        },
+        14: {
+            title: "ok this will be fast",
+            description: "Start with 2.6e29 bytes on reset",
+            cost: D(1000),
         },
     },
     buyables: {
@@ -316,6 +344,29 @@ addLayer("kb", {
             },
             unlocked() {return hasUpgrade('kb', 11)},
             purchaseLimit: 10,
+        },
+        12: {
+            cost(x) {return D(2.35).pow(x || getBuyableAmount(this.layer, this.id))},
+            display() {return "("+formatWhole(getBuyableAmount(this.layer, this.id))+"/8)<br><h3>buyable == generic</h3><br>+50% kilobytes.<br>Cost: "+format(this.cost())+" kilobytes<br>Currently: "+format(buyableEffect(this.layer, this.id))+"x"},
+            effect() {
+                let eff = D(0.5).mul(getBuyableAmount(this.layer, this.id)).add(1)
+                return eff
+            },
+            canAfford() {return player.kb.points.gte(this.cost())},
+            buy() {
+                let base = new Decimal(1)
+                let growth = 2.35
+                let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player[this.layer].points = player[this.layer].points.sub(cost)
+                addBuyables(this.layer, this.id, max)
+            },
+            style: {
+                "height": "125px",
+                "width": "125px"
+            },
+            unlocked() {return hasUpgrade('kb', 11)},
+            purchaseLimit: 8,
         },
     },
 })
@@ -380,7 +431,7 @@ addLayer("unl", {
         },
         6: {
             requirementDescription: "5 <b>Generic Buyable?</b> levels",
-            effectDescription: "Autobuy B upgrades",
+            effectDescription: "Keep B upgrades.",
             done() {return getBuyableAmount('kb', 11).gte(5)},
             unlocked() {return hasMilestone('unl', 5)},
         },

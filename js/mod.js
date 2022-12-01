@@ -34,7 +34,7 @@ function getStartPoints(){
 
 // Determines if it should show points/sec
 function canGenPoints(){
-	return hasUpgrade('b', 11)
+	return hasUpgrade('b', 11) || player.kb.unlocked
 }
 
 // Calculate points/sec!
