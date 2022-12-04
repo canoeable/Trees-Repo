@@ -109,3 +109,14 @@ function numHex(s)
 function calcNumToHex(m, a) {
 	return Math.floor(16777216 * (a / m))
 }
+
+function calcABgain() {
+	let gain = D(1)
+	gain = gain.mul(buyableEffect("ab", 11))
+	gain = gain.mul(buyableEffect("ab", 12))
+	gain = gain.mul(buyableEffect("ab", 13))
+	gain = gain.mul(upgradeEffect("ab", 12))
+	if(hasUpgrade('ab', 14)) gain = gain.mul(upgradeEffect("ab", 14))
+	gain = gain.pow(buyableEffect("ab", 21).max(1))
+	return gain
+}

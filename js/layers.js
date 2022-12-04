@@ -6,7 +6,7 @@ addLayer("b", {
         unlocked: true,
 		points: new Decimal(0),
     }},
-    color: "#4BDC13",
+    color: "#278782",
     requires: new Decimal(10), // Can be a function that takes requirement increases into account
     resource: "bytes", // Name of prestige currency
     baseResource: "points", // Name of resource prestige is based on
@@ -257,10 +257,16 @@ addLayer("b", {
         "prestige-button",
         "resource-display",
         ["row", [["buyable", 11], ["buyable", 12], ["buyable", 13], ["clickable", 1]]],
-        "upgrades"
+        "upgrades",
     ],
     //autoUpgrade() {return hasMilestone('unl', 6)}
 })
+
+/*
+colour bank: 
+#537a3a
+#bd225d
+*/
 
 addLayer("kb", {
     name: "kilobytes", // This is optional, only used in a few places, If absent it just uses the layer id.
@@ -269,20 +275,29 @@ addLayer("kb", {
     startData() { return {
         unlocked: false,
 		points: new Decimal(0),
+        //minreq: D(2.5e29)
     }},
     color: "#a155f2",
     requires() {
-        if(player.kb.points.lt(10000)) return new Decimal('2.5e29')
-        else return new Decimal('2.5e31')
+        let base = new Decimal('2.5e29') // Base layer cost
+        let mul = D(1) // Cost multiplier
+        let exp = D(1) // Cost exponent
+        let cost = base.mul(mul).pow(exp) // Layer cost = Base cost*Cost multiplier^Cost exponent
+        return cost // Returns cost if its higher than the minimum requirement, else returns the minimum requirement
     }, // Can be a function that takes requirement increases into account
     resource: "kilobytes", // Name of prestige currency
     baseResource: "bytes", // Name of resource prestige is based on
     baseAmount() {return player.b.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.07, // Prestige currency exponent
+    exponent() {
+        let exp = 0.07
+        return exp
+    }, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         mult = mult.mul(buyableEffect('kb', 12))
+        if(hasUpgrade('kb', 15)) mult = mult.mul(2)
+        if(hasUpgrade('kb', 21)) mult = mult.mul(3)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -320,6 +335,21 @@ addLayer("kb", {
             description: "Start with 2.6e29 bytes on reset",
             cost: D(1000),
         },
+        15: {
+            title: "aaaaaaaaa",
+            description: "2x kilobytes",
+            cost: D(7500),
+        },
+        21: {
+            title: "why cant i think of",
+            description: "3x kilobytes",
+            cost: D(17500),
+        },
+        22: {
+            title: "any upgrade names?",
+            description: "unlock 🆎",
+            cost: D(50000),
+        },
     },
     buyables: {
         11: {
@@ -336,7 +366,7 @@ addLayer("kb", {
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player[this.layer].points = player[this.layer].points.sub(cost)
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(1000))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(D(10)))
             },
             style: {
                 "height": "120px",
@@ -359,7 +389,7 @@ addLayer("kb", {
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player[this.layer].points = player[this.layer].points.sub(cost)
-                addBuyables(this.layer, this.id, max)
+                addBuyables(this.layer, this.id, max.min(D(8)))
             },
             style: {
                 "height": "120px",
@@ -369,7 +399,184 @@ addLayer("kb", {
             purchaseLimit: 8,
         },
     },
+    tabFormat: {
+        Main: {
+            content: [
+                "main-display",
+                "prestige-button",
+                "resource-display",
+                "buyables",
+                "upgrades",
+            ],
+        },
+        "🆎": {
+            embedLayer: "ab",
+            unlocked() {return hasUpgrade('kb', 22)}
+        },
+    },
 })
+
+addLayer("ab", {
+    name: "ab", // This is optional, only used in a few places, If absent it just uses the layer id.
+    symbol: "🆎", // This appears on the layer's node. Default is the id with the first letter capitalized
+    position: 0, // Horizontal position within a row. By default it uses the layer id and sorts in alphabetical order
+    startData() { return {
+        unlocked: true,
+		points: new Decimal(0),
+    }},
+    color: "#ff1414",
+    requires: new Decimal(10), // Can be a function that takes requirement increases into account
+    resource: "🆎", // Name of prestige currency
+    baseResource: "points", // Name of resource prestige is based on
+    baseAmount() {return player.points}, // Get the current amount of baseResource
+    type: "none", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
+    exponent: 0.5, // Prestige currency exponent
+    gainMult() { // Calculate the multiplier for main currency from bonuses
+        mult = new Decimal(1)
+        return mult
+    },
+    gainExp() { // Calculate the exponent on main currency from bonuses
+        return new Decimal(1)
+    },
+    row: 69, // Row the layer is in on the tree (0 is the first row)
+    hotkeys: [
+        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+    ],
+    layerShown(){return false},
+    tabFormat: [
+        ["display-text", () => player.ab.points.lt('1e1000') ? `You have ${layerText("ab", format(player.ab.points))} 🆎` : `${layerText("ab", format(player.ab.points))} 🆎`],
+        "blank",
+        ["display-text", () => player.ab.points.lt('1e1000') ? `You are gaining ${layerText("ab", format(player.ab.gain))} 🆎 per second` : `${layerText("ab", format(player.ab.gain))} 🆎 per second`],
+        "blank",
+        "milestones",
+        "buyables",
+        "upgrades",
+    ],
+    update(diff) {
+        player.ab.gain = calcABgain()
+        if(hasUpgrade('kb', 22)) addPoints("ab", player.ab.gain.mul(diff))
+    },
+    buyables: {
+        11: {
+            title: "🆎 booster",
+            display() {return `Cost: ${formatWhole(this.cost())} 🆎<br>Currently: ${formatWhole(buyableEffect(this.layer, this.id))}x 🆎<br> Bought ${formatWhole(getBuyableAmount(this.layer, this.id))}/250 times.`},
+            cost() {return D(50).mul(D(2.5).pow(getBuyableAmount(this.layer, this.id)))},
+            buy() {
+                let base = new Decimal(50)
+                let growth = 2.5
+                let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player[this.layer].points = player[this.layer].points.sub(cost)
+                addBuyables(this.layer, this.id, max.min(D(250).sub(getBuyableAmount(this.layer, this.id))))
+            }, // 🆎
+            effect() {                
+                let base = D(2)
+                if(hasUpgrade('ab', 13)) base = base.add(upgradeEffect('ab', 13))
+                let amt = getBuyableAmount(this.layer, this.id)
+                let eff = base.pow(amt)
+                return eff
+            },
+            canAfford() {return player.ab.points.gte(this.cost())},
+            purchaseLimit: 250,
+        },
+        12: {
+            title: "🆎 booster (scaled)",
+            display() {return `Cost: ${formatWhole(this.cost())} 🆎<br>Currently: ${formatWhole(buyableEffect(this.layer, this.id))}x 🆎<br> Bought ${formatWhole(getBuyableAmount(this.layer, this.id))}/250 times.`},
+            cost() {return D(50).mul(D(5).pow(getBuyableAmount(this.layer, this.id)))},
+            buy() {
+                let base = new Decimal(50)
+                let growth = 5
+                let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player[this.layer].points = player[this.layer].points.sub(cost)
+                addBuyables(this.layer, this.id, max.min(D(250).sub(getBuyableAmount(this.layer, this.id))))
+            }, // 🆎
+            effect() {
+                let base = D(2)
+                if(hasUpgrade('ab', 13)) base = base.add(upgradeEffect('ab', 13))
+                let amt = getBuyableAmount(this.layer, this.id)
+                let eff = base.pow(amt)
+                return eff
+            },
+            canAfford() {return player.ab.points.gte(this.cost())},
+            purchaseLimit: 250,
+        },
+        13: {
+            title: "🆎 booster (superscaled)",
+            display() {return `Cost: ${formatWhole(this.cost())} 🆎<br>Currently: ${formatWhole(buyableEffect(this.layer, this.id))}x 🆎<br> Bought ${formatWhole(getBuyableAmount(this.layer, this.id))}/250 times.`},
+            cost() {return D(5000).div(upgradeEffect("ab", 11)).mul(D(20).pow(getBuyableAmount(this.layer, this.id)))},
+            buy() {
+                let base = new Decimal(5000).div(upgradeEffect('ab', 11))
+                let growth = 20
+                let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player[this.layer].points = player[this.layer].points.sub(cost)
+                addBuyables(this.layer, this.id, max.min(D(250).sub(getBuyableAmount(this.layer, this.id))))
+            }, // 🆎
+            effect() {                
+                let base = D(2)
+                if(hasUpgrade('ab', 13)) base = base.add(upgradeEffect('ab', 13))
+                let amt = getBuyableAmount(this.layer, this.id)
+                let eff = base.pow(amt)
+                return eff
+            },
+            canAfford() {return player.ab.points.gte(this.cost())},
+            purchaseLimit: 250,
+        },
+        21: {
+            title: "🆎 booster 2",
+            display() {return `Cost: ${formatWhole(this.cost())} 🆎<br>Currently: ^${format(buyableEffect(this.layer, this.id))} 🆎<br> Bought ${formatWhole(getBuyableAmount(this.layer, this.id))}/100 times.`},
+            cost() {return D(1e302).mul(D(500).pow(getBuyableAmount(this.layer, this.id)))},
+            buy() {
+                let base = new Decimal(1e302)
+                let growth = 500
+                let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                player[this.layer].points = player[this.layer].points.sub(cost)
+                addBuyables(this.layer, this.id, max.min(D(100).sub(getBuyableAmount(this.layer, this.id))))
+            }, // 🆎
+            effect() {                
+                let base = D(0.01)
+                let amt = getBuyableAmount(this.layer, this.id)
+                let eff = base.mul(amt)
+                eff = eff.add(1)
+                return eff
+            },
+            canAfford() {return player.ab.points.gte(this.cost())},
+            purchaseLimit: 100,
+        },
+    },
+    upgrades: {
+        11: {
+            title: "sorry for 🆎 inflation",
+            description: "/1e100 superscaled 🆎 booster cost",
+            cost: D(1e197),
+            effect() {return hasUpgrade(this.layer, this.id) ? D(1e100) : D(1)}
+        },
+        12: {
+            title: "🆎🆎🆎🆎🆎🆎",
+            description: "Get a brisk 3x 🆎",
+            cost: D(1e227),
+            effect() {return hasUpgrade(this.layer, this.id) ? D(3) : D(1)}
+        },
+        13: {
+            title: "long 🆎 wait",
+            description: "🆎 boosts all 3 🆎 boosters base",
+            cost: D(1e228),
+            effect() {return player.ab.points.add(1).slog().sub(2).max(0).min(0.666)},
+            effectDisplay() {return `+${format(upgradeEffect(this.layer, this.id))}`}
+        },
+        14: {
+            title: "🆎 boosts 🆎",
+            description: "🆎 boosts itself",
+            cost: D(2e286),
+            effect() {return player.ab.points.add(1).pow(0.05).min(1e1000)},
+            effectDisplay() {return `${format(upgradeEffect(this.layer, this.id))}x`}
+        },
+    }
+})
+
+// 🆎🆎🆎🆎🆎🆎🆎🆎🆎🆎
 
 addLayer("unl", {
     name: "unlocks", // This is optional, only used in a few places, If absent it just uses the layer id.
