@@ -250,6 +250,7 @@ addLayer("b", {
                 buyBuyable('b', 13)
             },
             canClick() {return hasUpgrade('b', 15)},
+            unlocked() {return hasUpgrade('b', 15)},
         }
     },
     tabFormat: [
