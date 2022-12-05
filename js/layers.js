@@ -373,7 +373,6 @@ addLayer("kb", {
                 "height": "120px",
                 "width": "120px"
             },
-            unlocked() {return hasUpgrade('kb', 11)},
             purchaseLimit: 10,
         },
         12: {
