@@ -389,7 +389,7 @@ addLayer("kb", {
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
                 player[this.layer].points = player[this.layer].points.sub(cost)
-                addBuyables(this.layer, this.id, max.min(D(8)))
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(D(8)))
             },
             style: {
                 "height": "120px",
