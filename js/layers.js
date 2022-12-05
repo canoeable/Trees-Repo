@@ -469,9 +469,6 @@ addLayer("ab", {
         return new Decimal(1)
     },
     row: 1, // Row the layer is in on the tree (0 is the first row)
-    hotkeys: [
-        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
-    ],
     layerShown(){return false},
     tabFormat: [
         ["display-text", () => player.ab.points.lt('1e1000') ? `You have ${layerText("ab", format(player.ab.points))} 🆎` : `${layerText("ab", format(player.ab.points))} 🆎`],
