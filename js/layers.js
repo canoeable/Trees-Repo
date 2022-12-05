@@ -612,7 +612,7 @@ addLayer("ab", {
         },
         21: {
             title: "🆎 endgame (for now...)",
-            description: "Use 🆎's power to multiply kilobytes by 11",
+            description: "Use 🆎's power to multiply kilobytes by 11 (check unlocks after this)",
             cost: D('e911'),
         },
     }
