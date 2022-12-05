@@ -13,11 +13,15 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.0",
+	num: "1.01",
 	name: "release",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.01</h3><br>
+		- Fixed kilobytes buyables removing too much currency when bulking sometimes.<br>
+		- Added a single unlock.<br>
+		- Endgame is the same (2 megabytes)<br><br>
 	<h3>v1.0</h3><br>
 		- Made the game.<br>
 		- endgame: 2 megabytes.`
@@ -119,6 +123,7 @@ function calcABgain() {
 	if(hasUpgrade('ab', 14)) gain = gain.mul(upgradeEffect("ab", 14))
 	gain = gain.pow(buyableEffect("ab", 21).max(1))
 	if(hasUpgrade('ab', 15)) gain = gain.mul(upgradeEffect("ab", 15))
+	if(hasMilestone('unl', 8)) gain = gain.mul(3.5)
 	return gain
 }
 

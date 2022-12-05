@@ -299,6 +299,7 @@ addLayer("kb", {
         if(hasUpgrade('kb', 15)) mult = mult.mul(2)
         if(hasUpgrade('kb', 21)) mult = mult.mul(3)
         if(hasUpgrade('ab', 21)) mult = mult.mul(11)
+        if(hasMilestone('unl', 8)) mult = mult.mul(2.5)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -366,7 +367,7 @@ addLayer("kb", {
                 let growth = 1.12
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player[this.layer].points = player[this.layer].points.sub(cost)
+                player[this.layer].points = player[this.layer].points.sub(cost.min(Decimal.sumGeometricSeries(D(10).sub(getBuyableAmount(this.layer, this.id)), 1, 1.12, getBuyableAmount(this.layer, this.id))))
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(D(10)))
             },
             style: {
@@ -388,7 +389,7 @@ addLayer("kb", {
                 let growth = 2.35
                 let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
                 let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                player[this.layer].points = player[this.layer].points.sub(cost)
+                player[this.layer].points = player[this.layer].points.sub(cost.min(Decimal.sumGeometricSeries(D(10).sub(getBuyableAmount(this.layer, this.id)), 1, 2.35, getBuyableAmount(this.layer, this.id))))
                 setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(D(8)))
             },
             style: {
@@ -625,7 +626,7 @@ addLayer("unl", {
         unlocked: true,
 		points: new Decimal(0),
     }},
-    color()  {return numHex(calcNumToHex(8, player.unl.milestones.length))},
+    color()  {return numHex(calcNumToHex(9, player.unl.milestones.length))},
     requires: new Decimal(10), // Can be a function that takes requirement increases into account
     resource: "prestige points", // Name of prestige currency
     baseResource: "points", // Name of resource prestige is based on
@@ -686,6 +687,12 @@ addLayer("unl", {
             effectDescription: "Unlock a new layer",
             done() {return player.kb.points.gte(200000) && hasUpgrade('ab', 21)},
             unlocked() {return hasMilestone('unl', 6) && hasUpgrade('ab', 21)},
+        },
+        8: {
+            requirementDescription: "1 megabyte",
+            effectDescription: "x2.5 kilobytes and x3.5 🆎",
+            done() {return player.mb.points.gte(1)},
+            unlocked() {return hasMilestone('unl', 7)},
         },
     }
 })
