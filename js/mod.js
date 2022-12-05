@@ -20,7 +20,7 @@ let VERSION = {
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.0</h3><br>
 		- Made the game.<br>
-		- endgame: 10,101 kilobytes.`
+		- endgame: 2 megabytes.`
 
 let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
 
@@ -56,12 +56,12 @@ function addedPlayerData() { return {
 }}
 
 // Display extra things at the top of the page
-var displayThings = [
+var displayThings = [ function() {if(hasMilestone('unl', 7) && !player.mb.unlocked) return `It is recommended to get 2 megabytes for your first reset.`}
 ]
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.kb.points.gte(10101)
+	return player.mb.points.gte(2)
 }
 
 
@@ -118,5 +118,10 @@ function calcABgain() {
 	gain = gain.mul(upgradeEffect("ab", 12))
 	if(hasUpgrade('ab', 14)) gain = gain.mul(upgradeEffect("ab", 14))
 	gain = gain.pow(buyableEffect("ab", 21).max(1))
+	if(hasUpgrade('ab', 15)) gain = gain.mul(upgradeEffect("ab", 15))
 	return gain
+}
+
+function buyIn(cost, gain, curr) {
+	return D(curr).gte(cost) ? "" : "Can buy in: "+format(D(cost).sub(curr).div(gain))+" seconds"
 }
