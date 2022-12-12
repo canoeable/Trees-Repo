@@ -13,16 +13,16 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.01",
-	name: "release",
+	num: "1.02",
+	name: "The not-so-great restyle",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.02</h3><br>
-		- Restyled the game.<br>
+		- Restyled the game. (Thanks<br>
 		- Added 🅰️.<br>
 		- Added another unlock<br>
-		- Endgame: 3 megabytes and 120 🅰️
+		- Endgame: 3 megabytes and 120 🅰️<br><br>
 	<h3>v1.01</h3><br>
 		- Fixed kilobytes buyables removing too much currency when bulking sometimes.<br>
 		- Added a single unlock.<br>
