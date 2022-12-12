@@ -26,7 +26,7 @@ addLayer("b", {
         return new Decimal(1)
     },
     componentStyles: {
-        "prestige-button"() { return {'border-radius': "30px", 'border-top-right-radius': '0px', 'border-bottom-right-radius': "0px"} }
+        "prestige-button"() { return {'border-radius': "30px", 'border-top-right-radius': '0px', 'border-bottom-right-radius': "0px"} },
     },
     row: 0, // Row the layer is in on the tree (0 is the first row)
     hotkeys: [
