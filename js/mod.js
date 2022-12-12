@@ -3,7 +3,7 @@ let modInfo = {
 	id: "TheDataTree",
 	author: "not-h4re",
 	pointsName: "points",
-	modFiles: ["layers.js", "tree.js"],
+	modFiles: ["layers/bytes.js", "layers/kilobytes.js", "layers/megabytes.js", "layers/sublayers/ab.js", "layers/sublayers/a.js", "layers/sublayers/unlocks.js", "tree.js"],
 
 	discordName: "",
 	discordLink: "",
@@ -18,6 +18,11 @@ let VERSION = {
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.02</h3><br>
+		- Restyled the game.<br>
+		- Added 🅰️.<br>
+		- Added another unlock<br>
+		- Endgame: 3 megabytes and 120 🅰️
 	<h3>v1.01</h3><br>
 		- Fixed kilobytes buyables removing too much currency when bulking sometimes.<br>
 		- Added a single unlock.<br>
@@ -65,7 +70,7 @@ var displayThings = [ function() {if(hasMilestone('unl', 7) && !player.mb.unlock
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.mb.points.gte(2)
+	return player.mb.points.gte(3) && player.a.points.gte(120)
 }
 
 
@@ -85,6 +90,8 @@ function maxTickLength() {
 // Use this if you need to undo inflation from an older version. If the version is older than the version that fixed the issue,
 // you can cap their current resources with this.
 function fixOldSave(oldVersion){
+	player.a.points = D(0)
+	player.mb.upgrades = []
 }
 
 function layerText(layer, text, tag='h2') { return `<${tag} style='color:${temp[layer].color};text-shadow:${temp[layer].color} 0px 0px 10px;'>${text}</${tag}>` }
@@ -121,12 +128,18 @@ function calcABgain() {
 	gain = gain.mul(buyableEffect("ab", 13))
 	gain = gain.mul(upgradeEffect("ab", 12))
 	if(hasUpgrade('ab', 14)) gain = gain.mul(upgradeEffect("ab", 14))
-	gain = gain.pow(buyableEffect("ab", 21).max(1))
-	if(hasUpgrade('ab', 15)) gain = gain.mul(upgradeEffect("ab", 15))
+	gain = gain.pow(buyableEffect("ab", 14).max(1))
+	if(hasUpgrade('ab', 21)) gain = gain.mul(upgradeEffect("ab", 21))
 	if(hasMilestone('unl', 8)) gain = gain.mul(3.5)
+	if(hasUpgrade('ab', 23)) gain = gain.pow(upgradeEffect("ab", 23))
 	return gain
 }
 
-function buyIn(cost, gain, curr) {
-	return D(curr).gte(cost) ? "" : "Can buy in: "+format(D(cost).sub(curr).div(gain))+" seconds"
+function buyIn(cost, gain, curr, maxed=false) {
+	if(!maxed) {return D(curr).gte(cost) ? "" : "Can buy in: "+format(D(cost).sub(curr).div(gain))+" seconds"} else {return ""}
+}
+
+function calcAgain() {
+	let base = D(1)
+	return base
 }
