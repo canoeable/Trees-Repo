@@ -77,3 +77,13 @@ function maxTickLength() {
 // you can cap their current resources with this.
 function fixOldSave(oldVersion){
 }
+
+// Shortcut for new Decimal(x) because im lazy
+function d(x) {
+	return new Decimal(x)
+}
+
+// Makes text large with a glow effect
+function layerText(text, layer) {
+	return `<h2 style='color: ${tmp[layer].color};font-size: 30px;text-shadow: 0 0 10px ${tmp[layer].color};'>${text}</h2>`
+}
