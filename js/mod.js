@@ -1,7 +1,9 @@
+let namea = "The CHANGE_TO_SOMETHING_UNIQUE_NOW Tree"
+
 let modInfo = {
-	name: "The ??? Tree",
-	id: "mymod",
-	author: "nobody",
+	name: "The CHANGE_TO_SOMETHING_UNIQUE_NOW Tree",
+	id: "noth4re - "+namea,
+	author: "noth4re",
 	pointsName: "points",
 	modFiles: ["layers.js", "tree.js"],
 
