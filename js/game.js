@@ -27,7 +27,8 @@ function getResetGain(layer, useType = null) {
 		let gain = tmp[layer].baseAmount.div(tmp[layer].requires).pow(tmp[layer].exponent).times(tmp[layer].gainMult).pow(tmp[layer].gainExp)
 		if (gain.gte(tmp[layer].softcap)) gain = gain.pow(tmp[layer].softcapPower).times(tmp[layer].softcap.pow(decimalOne.sub(tmp[layer].softcapPower)))
 		gain = gain.times(tmp[layer].directMult)
-		return gain.floor().max(0);
+		gain = (tmp[layer].shouldRoundDown ? gain.floor() : gain)
+		return gain.max(0)
 	} else if (type=="custom"){
 		return layers[layer].getResetGain()
 	} else {

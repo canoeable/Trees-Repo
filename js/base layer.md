@@ -29,6 +29,7 @@ addLayer("p", {
     type: "normal",
     exponent: 0.5, // <1 if normal type, >1 if static
     requires: new Decimal(10),
+    shouldRoundDown: true, // Only works on 'normal' layers
 
     // Bonuses
     gainMult() {
