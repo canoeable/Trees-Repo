@@ -32,7 +32,7 @@ addLayer("b", {
     hotkeys: [
         {key: "b", description: "B: Reset for bytes", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return true},
+    layerShown: true,
     upgrades: {
         11: {
             title: "tratS",

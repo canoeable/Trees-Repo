@@ -43,7 +43,7 @@ addLayer("kb", {
     hotkeys: [
         {key: "k", description: "K: Reset for kilobytes", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
-    layerShown(){return true},
+    layerShown: true,
     upgrades: {
         11: {
             title: "Start II",

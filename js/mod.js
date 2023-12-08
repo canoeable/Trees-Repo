@@ -19,7 +19,7 @@ let VERSION = {
 
 let changelog = `<h1>Changelog:</h1><br>
 	<h3>v1.02</h3><br>
-		- Restyled the game. (Thanks<br>
+		- Restyled the game.<br>
 		- Added 🅰️.<br>
 		- Added another unlock<br>
 		- Endgame: 3 megabytes and 120 🅰️<br><br>
