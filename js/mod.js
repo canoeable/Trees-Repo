@@ -1,30 +1,31 @@
-let namea = "The CHANGE_TO_SOMETHING_UNIQUE_NOW Tree"
+let namea = "The Fishing Tree"
 
 let modInfo = {
-	name: "The CHANGE_TO_SOMETHING_UNIQUE_NOW Tree",
+	name: "The Fishing Tree",
 	id: "noth4re - "+namea,
-	author: "noth4re",
-	pointsName: "points",
+	author: "transientdream",
+	pointsName: "seconds",
 	modFiles: ["layers.js", "tree.js"],
 
 	discordName: "",
 	discordLink: "",
-	initialStartPoints: new Decimal (10), // Used for hard resets and new players
+	initialStartPoints: new Decimal (0), // Used for hard resets and new players
 	offlineLimit: 1,  // In hours
 }
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0",
-	name: "Literally nothing",
+	num: "0.0.1",
+	name: "🐟",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
-	<h3>v0.0</h3><br>
-		- Added things.<br>
-		- Added stuff.`
+	<h3>v0.0.1</h3><br>
+		- Made the game<br>
+		- Endgame: 100,000 fish<br>
+		- Fish 🐟`
 
-let winText = `Congratulations! You have reached the end and beaten this game, but for now...`
+let winText = `Congratulations! You have drained the sea of fish, for now...`
 
 // If you add new functions anywhere inside of a layer, and those functions have an effect when called, add them here.
 // (The ones here are examples, all official functions are already taken care of)
@@ -58,7 +59,7 @@ var displayThings = [
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.points.gte(new Decimal("e280000000"))
+	return player.f.points.gte(new Decimal("1e5"))
 }
 
 
