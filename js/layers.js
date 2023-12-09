@@ -4,7 +4,8 @@ addLayer("f", {
     * include the following in every layer
     */
     componentStyles: {
-        'prestige-button'() {return {'border-radius': '12px'}}
+        'prestige-button'() {return {'border-radius': '12px'}},
+
     },
     // END
     
@@ -23,6 +24,10 @@ addLayer("f", {
     color: "#1b4af5",
     row: 0,
     layerShown(){return true},
+    nodeStyle: {
+        "background": "rgb(0,0,179)",
+        "background": "linear-gradient(90deg, rgba(0,0,179,1) 0%, rgba(5,0,83,1) 50%, rgba(0,212,255,1) 100%)",
+    },
 
     // Prestige formula (base is (points/10)^0.5)
     type: "none",
@@ -78,7 +83,7 @@ addLayer("f", {
             Cost: ${format(this.cost())} fish
             Fishing cooldown is ${format(this.effect().mul(100))}% faster`},
             cost() {
-                return d(1.7).pow(layers.f.totalBuyables().add(1)).floor()
+                return d(1.7).pow(layers.f.totalBuyables().add(1)).div(layers.f.buyableCostModifier()).floor()
             },
             effect() {return d(1.5).pow(getBuyableAmount(this.layer, this.id))},
             buy() {
@@ -95,7 +100,7 @@ addLayer("f", {
             Cost: ${format(this.cost())} fish
             You get +${format(this.effect().mul(1))} fish on going fishing`},
             cost() {
-                return d(1.7).pow(layers.f.totalBuyables().add(1)).floor()
+                return d(1.7).pow(layers.f.totalBuyables().add(1)).div(layers.f.buyableCostModifier()).floor()
             },
             effect() {return getBuyableAmount(this.layer, this.id).add(1).mul(d(1.2).pow(getBuyableAmount(this.layer, this.id)))},
             buy() {
@@ -111,7 +116,7 @@ addLayer("f", {
             Cost: ${format(this.cost())} fish
             Effective total buyable count is reduced by ${format(this.effect().mul(1))}`},
             cost() {
-                return d(1.7).pow(layers.f.totalBuyables().add(this.effect()).add(1)).floor()
+                return d(1.7).pow(layers.f.totalBuyables().add(this.effect()).add(1)).div(layers.f.buyableCostModifier()).floor()
             },
             effect() {return d(1.6).mul(getBuyableAmount(this.layer, this.id))},
             buy() {
@@ -121,10 +126,36 @@ addLayer("f", {
             canAfford() {return player.f.points.gte(this.cost())},
         },
     },
+    upgrades: {
+        11: {
+            title: "Fish Generation",
+            description: "Generate 25% of your estimated fish gain per second per second",
+            cost: d(2500),
+            effect() {
+                let x = d(1/(layers.f.cooldown())).mul(layers.f.fishGain()).div(4)
+                if(hasUpgrade('f', 13)) x = x.mul(12)
+                return x
+            },
+            effectDisplay() {return `${format(this.effect())}/s`},
+        },
+        12: {
+            title: "Cheaper Buyables",
+            description: "Buyable costs are divided based on fish",
+            cost: d(616616),
+            effect() {return player.f.points.add(1).log(3).add(1)},
+            effectDisplay() {return `/${format(this.effect())}`},
+        },
+        13: {
+            title: "More Fish Generation",
+            description: "Multiply fish generation by 12",
+            cost: d(12345678),
+        }
+    },
 
     // Other 
     update(diff) {
         if(player.f.cooldown > 0) player.f.cooldown = Math.max(player.f.cooldown - diff, 0)
+        if(hasUpgrade('f', 11)) player.f.points = player.f.points.add(upgradeEffect('f', 11).mul(diff))
     },
     cooldown() {
         let cd = 5
@@ -143,7 +174,8 @@ addLayer("f", {
         ["display-text", "Buyable costs are based on the sum of all three buyables"],
         ["clickable", 13],
         "blank",
-        "buyables"
+        "buyables",
+        "upgrades",
     ],
     totalBuyables() {
         let x = getBuyableAmount(this.layer, 11).add(getBuyableAmount(this.layer, 12).add(getBuyableAmount(this.layer, 13)))
@@ -155,6 +187,19 @@ addLayer("f", {
             key: "f",
             description: "F: Go fishing",
             onPress() {layers.f.clickables[12].onClick()}
+        },
+        {
+            key: `q`,
+            description: `Q: Pause/unpause game`,
+            onPress() {
+                if(player.devSpeed == 1) player.devSpeed = 1e-308
+                else player.devSpeed = 1
+            }
         }
-    ]
+    ],
+    buyableCostModifier() {
+        let x = d(1)
+        if(hasUpgrade('f', 12)) x = x.mul(upgradeEffect('f', 12))
+        return x
+    }
 })
