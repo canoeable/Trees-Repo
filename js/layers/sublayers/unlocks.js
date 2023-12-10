@@ -29,9 +29,9 @@ addLayer("unl", {
     ],
     milestones: {
         1: {
-            requirementDescription: "50 bytes",
+            requirementDescription: "40 bytes",
             effectDescription: "B buyables are free",
-            done() {return player.b.points.gte(50) && hasUpgrade('b', 21)}
+            done() {return player.b.points.gte(40) && hasUpgrade('b', 21)}
         },
         2: {
             requirementDescription: "450 B buyable levels",
@@ -51,9 +51,9 @@ addLayer("unl", {
             unlocked() {return hasMilestone('unl', 3)},
         },
         5: {
-            requirementDescription: "3 kilobytes",
+            requirementDescription: "3 total kilobytes",
             effectDescription: "Generate 100% of bytes gain on reset per second.",
-            done() {return player.kb.points.gte(3)},
+            done() {return player.kb.total.gte(3)},
             unlocked() {return hasMilestone('unl', 4)},
         },
         6: {

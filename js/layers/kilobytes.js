@@ -26,8 +26,8 @@ addLayer("kb", {
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         mult = mult.mul(buyableEffect('kb', 12))
-        if(hasUpgrade('kb', 15)) mult = mult.mul(2)
-        if(hasUpgrade('kb', 21)) mult = mult.mul(3)
+        if(hasUpgrade('kb', 15)) mult = mult.mul(1)
+        if(hasUpgrade('kb', 21)) mult = mult.mul(12)
         if(hasUpgrade('ab', 22)) mult = mult.mul(11)
         if(hasMilestone('unl', 8)) mult = mult.mul(2.5)
         if(hasMilestone('unl', 9)) mult = mult.mul(10)
@@ -93,7 +93,7 @@ addLayer("kb", {
         14: {
             title: "ok this will be fast",
             description: "Start with 2.6e29 bytes on reset",
-            cost: D(1000),
+            cost: D(500),
             style: {
                 "height": "120px",
                 "width": "120px",
@@ -105,8 +105,8 @@ addLayer("kb", {
         },
         15: {
             title: "aaaaaaaaa",
-            description: "2x kilobytes",
-            cost: D(7500),
+            description: "Generate 2000% of kilobytes gain on reset per second",
+            cost: D(750),
             style: {
                 "height": "120px",
                 "width": "120px",
@@ -118,8 +118,8 @@ addLayer("kb", {
         },
         21: {
             title: "why cant i think of",
-            description: "3x kilobytes",
-            cost: D(17500),
+            description: "12x kilobytes",
+            cost: D(10000),
             style: {
                 "height": "120px",
                 "width": "120px",
@@ -228,4 +228,8 @@ addLayer("kb", {
             }
         },
     },
+    passiveGeneration() {
+        if(hasUpgrade('kb', 15)) return 20
+        return
+    }
 })

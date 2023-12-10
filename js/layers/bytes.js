@@ -12,7 +12,7 @@ addLayer("b", {
     baseResource: "points", // Name of resource prestige is based on
     baseAmount() {return player.points}, // Get the current amount of baseResource
     type: "normal", // normal: cost to gain currency depends on amount gained. static: cost depends on how much you already have
-    exponent: 0.478, // Prestige currency exponent
+    exponent: 0.51616, // Prestige currency exponent
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         if(hasUpgrade('b', 14)) mult = mult.mul(upgradeEffect('b', 14))
@@ -20,6 +20,7 @@ addLayer("b", {
         if(hasUpgrade('b', 23)) mult = mult.mul(upgradeEffect('b', 23))
         mult = mult.mul(buyableEffect('b', 13))
         if(hasMilestone('unl', 4)) mult = mult.mul(1.5)
+        if(hasUpgrade('b', 21)) mult = mult.mul(5)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -87,7 +88,7 @@ addLayer("b", {
         14: {
             title: "generic upgrade two",
             description: "Gain more bytes based on points.",
-            cost: D(16),
+            cost: D(11),
             effect() {
                 let eff = player.points.add(1).log10().cbrt().add(1)
                 return eff
@@ -117,8 +118,8 @@ addLayer("b", {
         },
         21: {
             title: "somewhat generic upgrade",
-            description: "Unlock <b>unlocks</b>",
-            cost: D(50),
+            description: "Unlock <b>unlocks</b> and multiply point and byte gain by 5 (requires 40 bytes to buy)",
+            cost: D(0),
             style: {
                 "height": "120px",
                 "width": "120px",
@@ -127,6 +128,7 @@ addLayer("b", {
                 "border-bottom-left-radius": "25%",
                 "border-bottom-right-radius": "0px",
             },
+            canAfford() {return player.b.points.gte(40)},
         },
         22: {
             title: "g e n e r i c  u p g r a d e",
@@ -260,7 +262,11 @@ addLayer("b", {
             display() {return "("+formatWhole(getBuyableAmount(this.layer, this.id).add(tmp['b'].buyables[11].bonus))+"/"+formatWhole(D(100).add(tmp['b'].buyables[11].bonus))+")<br><h3>Generic Buyable</h3><br>+10% points<br>Cost: "+format(this.cost())+" bytes<br>Currently: "+format(buyableEffect(this.layer, this.id))+"x"},
             effect() {return D(1).add(D(0.1).mul(getBuyableAmount(this.layer, this.id).add(tmp['b'].buyables[11].bonus))).mul(buyableEffect('b', 12))},
             canAfford() {return player.b.points.gte(this.cost())},
-            buy() {if(!hasMilestone('unl', 1)){player[this.layer].points = player[this.layer].points.sub(this.cost())}; setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))},
+            buy() {
+                if(!hasMilestone('unl', 1)){player[this.layer].points = player[this.layer].points.sub(this.cost())
+                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(1))} else {
+                setBuyableAmount(this.layer, this.id, player.b.points.min(100).floor())}
+            },
             style: {
                 "height": "120px",
                 "width": "120px",
@@ -286,12 +292,16 @@ addLayer("b", {
             },
             canAfford() {return player.b.points.gte(this.cost())},
             buy() {
-                let base = new Decimal(1).div(upgradeEffect('b', 25))
-                let growth = 1.12
-                let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone('unl', 1)) player[this.layer].points = player[this.layer].points.sub(cost)
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(1000))
+                if(!hasMilestone('unl', 1)) {
+                    let base = new Decimal(1).div(upgradeEffect('b', 25))
+                    let growth = 1.12
+                    let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                    player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(1000))
+                } else {
+                    setBuyableAmount(this.layer, this.id, player.b.points.max(1.12).mul(upgradeEffect('b', 25)).log(1.12).max(1))
+                }
             },
             style: {
                 "height": "120px",
@@ -313,12 +323,16 @@ addLayer("b", {
             },
             canAfford() {return player.b.points.gte(this.cost())},
             buy() {
-                let base = new Decimal(1).div(upgradeEffect('b', 25))
-                let growth = 1.12001
-                let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
-                let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
-                if (!hasMilestone('unl', 1)) player[this.layer].points = player[this.layer].points.sub(cost)
-                setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(1000))
+                if(!hasMilestone('unl', 1)) {
+                    let base = new Decimal(1).div(upgradeEffect('b', 25))
+                    let growth = 1.12001
+                    let max = Decimal.affordGeometricSeries(player[this.layer].points, base, growth, getBuyableAmount(this.layer, this.id))
+                    let cost = Decimal.sumGeometricSeries(max, base, growth, getBuyableAmount(this.layer, this.id))
+                    player[this.layer].points = player[this.layer].points.sub(cost)
+                    setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(1000))
+                } else {
+                    setBuyableAmount(this.layer, this.id, player.b.points.max(1.12001).mul(upgradeEffect('b', 25)).log(1.12001).max(1))
+                }
             },
             style: {
                 "height": "120px",

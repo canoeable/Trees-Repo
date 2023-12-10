@@ -13,11 +13,24 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.02",
-	name: "The not-so-great restyle",
+	num: "1.03",
+	name: "Rebalancing (finally!)",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
+	<h3>v1.03</h3><br>
+		- Bytes cost exponent is now 0.516 (from 0.487)<br>
+		- Byte Upgrade 21 cost is now 0 (from 50) but it requires 40 bytes to buy<br>
+		- Byte Upgrade 21 now boosts byte and point gain by x5<br>
+		- You can now reset for fractional currency amounts<br>
+		- Nerfed Kilobyte Upgrade 21 cost to 500 (from 1000)<br>
+		- Nerfed Kilobyte Upgrade 22 cost to 750 (from 7500)<br>
+		- Kilobyte Upgrade 22 now multiplies kilobyte gain by 1 (from 2) but it passively generates 2000% of kilobyte gain on reset per second<br>
+		- Nerfed Kilobyte Upgrade 23 cost to 10000 (from 17500) and buffed its effect to 12 (from 3)<br>
+		- Base 🆎 gain is now 5/s (from 1/s)<br>
+		- I think thats everything<br>
+	<h3>v1.02.1</h3><br>
+		- Fixed bug where exporting didn't work if you had more than 2.5e29 bytes<br>
 	<h3>v1.02</h3><br>
 		- Restyled the game.<br>
 		- Added 🅰️.<br>
@@ -51,12 +64,13 @@ function getPointGen() {
 	if(!canGenPoints())
 		return new Decimal(0)
 
-	let gain = new Decimal(1.111111)
+	let gain = new Decimal(1.25)
 	if(hasUpgrade('b', 12)) gain = gain.mul(upgradeEffect('b', 12))
 	if(hasUpgrade('b', 32)) gain = gain.mul(upgradeEffect('b', 32))
 	gain = gain.mul(buyableEffect('b', 11))
 	if(hasMilestone('unl', 3)) gain = gain.mul(1.5)
 	gain = gain.mul(buyableEffect('kb', 11))
+	if(hasUpgrade('b', 21)) gain = gain.mul(5)
 	return gain
 }
 
@@ -70,7 +84,7 @@ var displayThings = [ function() {if(hasMilestone('unl', 7) && !player.mb.unlock
 
 // Determines when the game "ends"
 function isEndgame() {
-	return player.mb.points.gte(3) && player.a.points.gte(120)
+	return player.mb.points.gte(2)
 }
 
 
@@ -122,7 +136,7 @@ function calcNumToHex(m, a) {
 }
 
 function calcABgain() {
-	let gain = D(1)
+	let gain = D(5)
 	gain = gain.mul(buyableEffect("ab", 11))
 	gain = gain.mul(buyableEffect("ab", 12))
 	gain = gain.mul(buyableEffect("ab", 13))
