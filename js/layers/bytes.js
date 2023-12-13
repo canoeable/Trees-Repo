@@ -20,7 +20,8 @@ addLayer("b", {
         if(hasUpgrade('b', 23)) mult = mult.mul(upgradeEffect('b', 23))
         mult = mult.mul(buyableEffect('b', 13))
         if(hasMilestone('unl', 4)) mult = mult.mul(1.5)
-        if(hasUpgrade('b', 21)) mult = mult.mul(5)
+        if(hasUpgrade('b', 21)) mult = mult.mul(3)
+        if(hasUpgrade('eb', 11)) mult = mult.mul(2.222)
         return mult
     },
     gainExp() { // Calculate the exponent on main currency from bonuses
@@ -118,7 +119,7 @@ addLayer("b", {
         },
         21: {
             title: "somewhat generic upgrade",
-            description: "Unlock <b>unlocks</b> and multiply point and byte gain by 5 (requires 40 bytes to buy)",
+            description: "Unlock <b>unlocks</b> and multiply byte gain by 3 (requires 40 bytes to buy)",
             cost: D(0),
             style: {
                 "height": "120px",
@@ -300,7 +301,7 @@ addLayer("b", {
                     player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(1000))
                 } else {
-                    setBuyableAmount(this.layer, this.id, player.b.points.max(1.12).mul(upgradeEffect('b', 25)).log(1.12).max(1))
+                    setBuyableAmount(this.layer, this.id, player.b.points.max(1.12).mul(upgradeEffect('b', 25)).log(1.12).max(1).ceil())
                 }
             },
             style: {
@@ -331,7 +332,7 @@ addLayer("b", {
                     player[this.layer].points = player[this.layer].points.sub(cost)
                     setBuyableAmount(this.layer, this.id, getBuyableAmount(this.layer, this.id).add(max).min(1000))
                 } else {
-                    setBuyableAmount(this.layer, this.id, player.b.points.max(1.12001).mul(upgradeEffect('b', 25)).log(1.12001).max(1))
+                    setBuyableAmount(this.layer, this.id, player.b.points.max(1.12001).mul(upgradeEffect('b', 25)).log(1.12001).max(1).ceil())
                 }
             },
             style: {
@@ -368,7 +369,7 @@ addLayer("b", {
         if(hasUpgrade('kb', 14)) keepcurrency = D(2.6e29)
         layerDataReset(this.layer, keep)
         if(keepcurrency.gte(1)) addPoints('b', keepcurrency)
-        if(hasMilestone('unl', 6)) player.b.upgrades = [11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 31, 32, 33]
+        if(hasMilestone('unl', 6) && resettingLayer == 'kb') player.b.upgrades = [11, 12, 13, 14, 15, 21, 22, 23, 24, 25, 31, 32, 33]
     },
     tabFormat: [
         "main-display",

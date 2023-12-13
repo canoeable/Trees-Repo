@@ -58,14 +58,14 @@ addLayer("unl", {
         },
         6: {
             requirementDescription: "5 <b>Generic Buyable?</b> levels",
-            effectDescription: "Keep B upgrades.",
+            effectDescription: "Keep B upgrades on kilobyte reset",
             done() {return getBuyableAmount('kb', 11).gte(5)},
             unlocked() {return hasMilestone('unl', 5)},
         },
         7: {
-            requirementDescription: "200,000 kilobytes",
+            requirementDescription: "500,000 kilobytes",
             effectDescription: "Unlock a new layer",
-            done() {return player.kb.points.gte(200000) && hasUpgrade('ab', 21)},
+            done() {return player.kb.points.gte(500000) && hasUpgrade('ab', 21)},
             unlocked() {return (hasMilestone('unl', 6) && hasUpgrade('ab', 21)) || hasMilestone(this.layer, this.id)},
         },
         8: {
@@ -80,5 +80,12 @@ addLayer("unl", {
             done() {return player.mb.points.gte(2)},
             unlocked() {return hasMilestone('unl', 8)},
         },
+    },
+    doReset(resettingLayer) {
+        if(resettingLayer == 'eb') {
+            let x = player.unl.milestones
+            let index = [x.indexOf(1),x.indexOf(2),x.indexOf(3),x.indexOf(4),x.indexOf(5),x.indexOf(6),x.indexOf(7)]
+            player.unl.milestones.splice()
+        } else return
     }
 })

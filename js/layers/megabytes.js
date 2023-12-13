@@ -7,7 +7,7 @@ addLayer("mb", {
 		points: new Decimal(0),
     }},
     color: "#67944a",
-    requires: new Decimal(777777), // Can be a function that takes requirement increases into account
+    requires: new Decimal(2e6), // Can be a function that takes requirement increases into account
     resource: "megabytes", // Name of prestige currency
     baseResource: "kilobytes", // Name of resource prestige is based on
     baseAmount() {return player.kb.points}, // Get the current amount of baseResource
@@ -29,20 +29,5 @@ addLayer("mb", {
     branches: ['kb'],
     upgrades: {
     },
-    tabFormat: {
-        "Main": {
-            content: [
-                "main-display",
-                "prestige-button",
-                "resource-display",
-                "milestones",
-                "buyables",
-                "upgrades",
-            ]
-        },
-        "🅰️": {
-            embedLayer: "a",
-            unlocked() {return hasUpgrade('ab', 23) || player.a.total.gt(0)}
-        }
-    }
+    base: 3.2,
 })

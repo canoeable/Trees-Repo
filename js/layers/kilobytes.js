@@ -26,11 +26,13 @@ addLayer("kb", {
     gainMult() { // Calculate the multiplier for main currency from bonuses
         mult = new Decimal(1)
         mult = mult.mul(buyableEffect('kb', 12))
-        if(hasUpgrade('kb', 15)) mult = mult.mul(1)
+        if(hasUpgrade('kb', 14)) mult = mult.mul(2)
+        if(hasUpgrade('kb', 15)) mult = mult.mul(4)
         if(hasUpgrade('kb', 21)) mult = mult.mul(12)
         if(hasUpgrade('ab', 22)) mult = mult.mul(11)
         if(hasMilestone('unl', 8)) mult = mult.mul(2.5)
         if(hasMilestone('unl', 9)) mult = mult.mul(10)
+        if(hasUpgrade('eb', 11)) mult = mult.mul(2.222)
         return mult
     },
     componentStyles: {
@@ -47,7 +49,7 @@ addLayer("kb", {
     upgrades: {
         11: {
             title: "Start II",
-            description: "Start with 1024 bytes on reset.",
+            description: "Start with 1024 bytes on reset and unlock a buyable",
             cost: D(3),
             style: {
                 "height": "120px",
@@ -92,7 +94,7 @@ addLayer("kb", {
         },
         14: {
             title: "ok this will be fast",
-            description: "Start with 2.6e29 bytes on reset",
+            description: "Start with 2.6e29 bytes on reset and x2 kilobyte gain",
             cost: D(500),
             style: {
                 "height": "120px",
@@ -105,8 +107,8 @@ addLayer("kb", {
         },
         15: {
             title: "aaaaaaaaa",
-            description: "Generate 2000% of kilobytes gain on reset per second",
-            cost: D(750),
+            description: "x4 kilobyte gain",
+            cost: D(2222),
             style: {
                 "height": "120px",
                 "width": "120px",
@@ -119,7 +121,7 @@ addLayer("kb", {
         21: {
             title: "why cant i think of",
             description: "12x kilobytes",
-            cost: D(10000),
+            cost: D(15000),
             style: {
                 "height": "120px",
                 "width": "120px",
@@ -132,7 +134,7 @@ addLayer("kb", {
         22: {
             title: "any upgrade names?",
             description: "unlock 🆎",
-            cost: D(50000),
+            cost: D(200000),
             style: {
                 "height": "240px",
                 "width": "120px",
@@ -228,8 +230,4 @@ addLayer("kb", {
             }
         },
     },
-    passiveGeneration() {
-        if(hasUpgrade('kb', 15)) return 20
-        return
-    }
 })

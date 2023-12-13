@@ -262,7 +262,7 @@ addLayer("ab", {
         },
         24: {
             title: "no more 🆎",
-            description: "Unlock 🅰️",
+            description: "Unlock nothing",
             cost: Decimal.pow(10, 3461),
             unlocked() {return hasMilestone('unl', 9)},
             style: {
