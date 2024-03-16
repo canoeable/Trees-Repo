@@ -1,10 +1,10 @@
-let namea = "The CHANGE_TO_SOMETHING_UNIQUE_NOW Tree"
+let namea = "The STARLIVHT Tree"
 
 let modInfo = {
-	name: "The CHANGE_TO_SOMETHING_UNIQUE_NOW Tree",
-	id: "noth4re - "+namea,
-	author: "noth4re",
-	pointsName: "points",
+	name: "The STΔRLIVHT Tree",
+	id: "erulure - "+namea,
+	author: "erulure",
+	pointsName: "seconds played",
 	modFiles: ["layers.js", "tree.js"],
 
 	discordName: "",
@@ -15,8 +15,8 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "0.0",
-	name: "Literally nothing",
+	num: "0.44",
+	name: "release thing idk",
 }
 
 let changelog = `<h1>Changelog:</h1><br>
@@ -48,12 +48,58 @@ function getPointGen() {
 	return gain
 }
 
+function getPointGain(x) {
+	let gain = d(1)
+	// wow this makes it easy for universal effects
+	if(hasUpgrade('c', 15)) gain = gain.mul(upgradeEffect('c', 15))
+	if(x=='c') {
+		if(hasUpgrade('c', 11)) gain = gain.mul(3)
+		if(hasUpgrade('c', 17)) gain = gain.mul(4.4)
+		if(hasUpgrade('c', 18)) gain = gain.mul(upgradeEffect('c', 18))
+		if(hasUpgrade('c', 22)) gain = gain.mul(16)
+		return gain
+	}
+	if(x=='d'){
+		if(hasUpgrade('d', 11)) gain = gain.mul(3)
+		if(hasUpgrade('d', 17)) gain = gain.mul(4.4)
+		if(hasUpgrade('d', 18)) gain = gain.mul(upgradeEffect('d', 18))
+		if(hasUpgrade('d', 22)) gain = gain.mul(16)
+		return gain
+	}
+	if(x=='h'){
+		if(hasUpgrade('h', 11)) gain = gain.mul(3)
+		if(hasUpgrade('h', 17)) gain = gain.mul(4.4)
+		if(hasUpgrade('h', 18)) gain = gain.mul(upgradeEffect('h', 18))
+		if(hasUpgrade('h', 22)) gain = gain.mul(16)
+		return gain
+	}
+	if(x=='s'){
+		if(hasUpgrade('s', 11)) gain = gain.mul(3)
+		if(hasUpgrade('s', 17)) gain = gain.mul(4.4)
+		if(hasUpgrade('s', 18)) gain = gain.mul(upgradeEffect('s', 18))
+		if(hasUpgrade('s', 22)) gain = gain.mul(16)
+		return gain
+	}
+	if(x=='j'){
+		return gain.mul(0)
+	}
+	return d(0) // failsafe
+}
+
 // You can add non-layer related variables that should to into "player" and be saved here, along with default values
 function addedPlayerData() { return {
+	cpoints: d(0),
+	dpoints: d(0),
+	hpoints: d(0),
+	spoints: d(0),
+	jpoints: d(0),
 }}
 
 // Display extra things at the top of the page
 var displayThings = [
+	function() {return `You have `+layerText(format(player.cpoints), 'c')+` clover frags, `+layerText(format(player.dpoints), 'd')+` dia frags,`},
+	function() {return layerText(format(player.hpoints), 'h')+` heart frags, and `+layerText(format(player.spoints), 's')+` spade frags.`},
+	function() {return `(+${format(getPointGain('c'))}/s, +${format(getPointGain('d'))}/s, +${format(getPointGain('h'))}/s and +${format(getPointGain('s'))}/s)`}
 ]
 
 // Determines when the game "ends"
@@ -88,4 +134,12 @@ function d(x) {
 // Makes text large with a glow effect
 function layerText(text, layer) {
 	return `<h2 style='color: ${tmp[layer].color};font-size: 30px;text-shadow: 0 0 10px ${tmp[layer].color};'>${text}</h2>`
+}
+
+// handles point gain
+function handlePointGain(diff){
+	player.cpoints = player.cpoints.add(getPointGain('c').mul(diff))
+	player.dpoints = player.dpoints.add(getPointGain('d').mul(diff))
+	player.hpoints = player.hpoints.add(getPointGain('h').mul(diff))
+	player.spoints = player.spoints.add(getPointGain('s').mul(diff))
 }
