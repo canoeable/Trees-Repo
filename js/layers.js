@@ -67,6 +67,8 @@ addLayer("c", {
         if(hasUpgrade(this.layer, 16)) mult = mult.mul(upgradeEffect(this.layer, 16))
         if(hasUpgrade(this.layer, 21)) mult = mult.mul(upgradeEffect(this.layer, 21))
         if(hasUpgrade(this.layer, 22)) mult = mult.div(3)
+        if(hasUpgrade('i', 13)) mult = mult.mul(upgradeEffect('i', 13))
+        if(hasUpgrade('i', 12)) mult = mult.mul(2.22)
 
         if(hasUpgrade('c', 13)) mult = mult.mul(upgradeEffect('c', 13)[0])
         if(hasUpgrade('d', 13)) mult = mult.mul(upgradeEffect('d', 13)[1])
@@ -162,6 +164,22 @@ addLayer("c", {
             description: "divide clover point gain by 3, but multiply clover frag gain by 16",
             cost: d(1673),
         },
+        23: {
+            title: "c11",
+            description: "boost clover frags based on spade + heart points",
+            cost: d(4444),
+            effect() {return player.s.points.add(player.h.points).add(1).log(9).add(1)},
+            effectDisplay() {return `x${format(upgradeEffect(this.layer, this.id))}`},
+            tooltip: "Made by Nif!<br>log9(spade points + heart points + 1) + 1",
+        },
+    },
+    effect() {
+        if(!hasUpgrade('i', 11)) return d(1)
+        return player[this.layer].points.add(1).log10().add(1)
+    },
+    effectDescription() {
+        if(hasUpgrade('i', 11)) return `boosting clover frags by ${layerText(format(layerEffect(this.layer)), this.layer)}`
+        else return
     },
 })
 
@@ -218,6 +236,8 @@ addLayer("d", {
         if(hasUpgrade(this.layer, 16)) mult = mult.mul(upgradeEffect(this.layer, 16))
         if(hasUpgrade(this.layer, 21)) mult = mult.mul(upgradeEffect(this.layer, 21))
         if(hasUpgrade(this.layer, 22)) mult = mult.div(3)
+        if(hasUpgrade('i', 13)) mult = mult.mul(upgradeEffect('i', 13))
+        if(hasUpgrade('i', 12)) mult = mult.mul(2.22)
 
         if(hasUpgrade('c', 13)) mult = mult.mul(upgradeEffect('c', 13)[1])
         if(hasUpgrade('d', 13)) mult = mult.mul(upgradeEffect('d', 13)[0])
@@ -304,6 +324,22 @@ addLayer("d", {
             description: "divide dia point gain by 3, but multiply dia frag gain by 16",
             cost: d(1673),
         },
+        23: {
+            title: "d11",
+            description: "boost dia frags based on spade + heart points",
+            cost: d(4444),
+            effect() {return player.s.points.add(player.h.points).add(1).log(9).add(1)},
+            effectDisplay() {return `x${format(upgradeEffect(this.layer, this.id))}`},
+            tooltip: "Made by Nif!<br>log9(spade points + heart points + 1) + 1",
+        },
+    },
+    effect() {
+        if(!hasUpgrade('i', 11)) return d(1)
+        return player[this.layer].points.add(1).log10().add(1)
+    },
+    effectDescription() {
+        if(hasUpgrade('i', 11)) return `boosting dia frags by ${layerText(format(layerEffect(this.layer)), this.layer)}`
+        else return
     },
 })
 
@@ -358,6 +394,8 @@ addLayer("h", {
         if(hasUpgrade(this.layer, 16)) mult = mult.mul(upgradeEffect(this.layer, 16))
         if(hasUpgrade(this.layer, 21)) mult = mult.mul(upgradeEffect(this.layer, 21))
         if(hasUpgrade(this.layer, 22)) mult = mult.div(3)
+        if(hasUpgrade('i', 13)) mult = mult.mul(upgradeEffect('i', 13))
+        if(hasUpgrade('i', 12)) mult = mult.mul(2.22)
 
         if(hasUpgrade('s', 14)) mult = mult.mul(upgradeEffect('s', 14)[1])
         if(hasUpgrade('h', 14)) mult = mult.mul(upgradeEffect('h', 14)[0])
@@ -443,6 +481,22 @@ addLayer("h", {
             description: "divide heart point gain by 3, but multiply heart frag gain by 16",
             cost: d(1673),
         },
+        23: {
+            title: "h11",
+            description: "boost heart frags based on clover + dia points",
+            cost: d(4444),
+            effect() {return player.c.points.add(player.d.points).add(1).log(9).add(1)},
+            effectDisplay() {return `x${format(upgradeEffect(this.layer, this.id))}`},
+            tooltip: "Made by Nif!<br>log9(clover points + dia points + 1) + 1",
+        },
+    },
+    effect() {
+        if(!hasUpgrade('i', 11)) return d(1)
+        return player[this.layer].points.add(1).log10().add(1)
+    },
+    effectDescription() {
+        if(hasUpgrade('i', 11)) return `boosting heart frags by ${layerText(format(layerEffect(this.layer)), this.layer)}`
+        else return
     },
 })
 
@@ -497,6 +551,8 @@ addLayer("s", {
         if(hasUpgrade(this.layer, 16)) mult = mult.mul(upgradeEffect(this.layer, 16))
         if(hasUpgrade(this.layer, 21)) mult = mult.mul(upgradeEffect(this.layer, 21))
         if(hasUpgrade(this.layer, 22)) mult = mult.div(3)
+        if(hasUpgrade('i', 13)) mult = mult.mul(upgradeEffect('i', 13))
+        if(hasUpgrade('i', 12)) mult = mult.mul(2.22)
 
         if(hasUpgrade('s', 14)) mult = mult.mul(upgradeEffect('s', 14)[0])
         if(hasUpgrade('h', 14)) mult = mult.mul(upgradeEffect('h', 14)[1])
@@ -582,16 +638,38 @@ addLayer("s", {
             description: "divide spade point gain by 3, but multiply spade frag gain by 16",
             cost: d(1673),
         },
+        23: {
+            title: "s11",
+            description: "boost spade frags based on clover + dia points",
+            cost: d(4444),
+            effect() {return player.c.points.add(player.d.points).add(1).log(9).add(1)},
+            effectDisplay() {return `x${format(upgradeEffect(this.layer, this.id))}`},
+            tooltip: "Made by Nif!<br>log9(clover points + dia points + 1) + 1",
+        },
+    },
+    effect() {
+        if(!hasUpgrade('i', 11)) return d(1)
+        return player[this.layer].points.add(1).log10().add(1)
+    },
+    effectDescription() {
+        if(hasUpgrade('i', 11)) return `boosting spade frags by ${layerText(format(layerEffect(this.layer)), this.layer)}`
+        else return
     },
 })
 
 // ignite
-/*addLayer("i", {
+addLayer("i", {
     // Other than required things,
     // include the following in every layer
     
     componentStyles: {
         'prestige-button'() {return {'border-radius': '12px'}}
+    },
+    onPrestige() {
+        player.cpoints = d(0)
+        player.dpoints = d(0)
+        player.hpoints = d(0)
+        player.spoints = d(0)
     },
     // END
     
@@ -599,32 +677,44 @@ addLayer("s", {
     startData() { return {
         unlocked: true,
 		points: new Decimal(0),
-        total: new Decimal(0),
+        best: new Decimal(0),
     }},
 
     // Name and other displays
-    name: "prestige",
-    symbol: "P",
-    resource: "prestige points",
+    name: "ignition",
+    symbol: "i",
+    resource: "ignition points",
     position: 0,
-    color: "#4BDC13",
-    row: 0,
+    color: "#690404",
+    row: 1,
     layerShown(){return true},
+    branches: ['c', 'd', 's', 'h'],
 
     // Prestige formula (base is (points/10)^0.5)
-    baseResource: "points",
-    baseAmount() {return player.points},
-    requires: new Decimal(600),
+    baseResource: "sum of all points",
+    baseAmount() {return player.c.points.add(player.d.points).add(player.s.points).add(player.h.points)},
+    requires: new Decimal(20000),
     shouldRoundDown: true, // Only works on 'normal' layers
     type: "custom",
     getResetGain() {
         let x = player.c.points.add(player.d.points).add(player.s.points).add(player.h.points)
-        let gain = x.div(600).div(d(10).pow(player.i.total))
-        gain = gain.mul(tmp.i.gainMult()).pow(tmp.i.gainExp())
-        return gain.floor().max(0)
+        let gain = x.div(20).max(1).log(1000).sub(player.i.best)
+        gain = gain.mul(tmp.i.gainMult).pow(tmp.i.gainExp)
+        return tn(gain.floor()).max(0)
     },
     getNextAt() {
-        
+        let amt = inversetn(player.i.best.add(getResetGain('i'))).add(1)
+        let mult = tmp.i.gainMult
+        let exp = tmp.i.gainExp
+        let req = d(1000).pow(amt).mul(20).pow(exp.recip()).div(mult)
+
+        return req
+    },
+    prestigeButtonText() {
+        return `Ignite your points for <b>+${formatWhole(getResetGain('i'))}</b> ignition points<br><br>Next: ${format(player.c.points.add(player.d.points).add(player.s.points).add(player.h.points))}/${format(getNextAt('i'), 1)} sum of points`
+    },
+    canReset() {
+        return getResetGain(this.layer).gte(1)
     },
 
     // Bonuses
@@ -639,9 +729,81 @@ addLayer("s", {
 
     // QoL things
     hotkeys: [
-        {key: "p", description: "P: Reset for prestige points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
+        {key: "i", description: "i: burn your points", onPress(){if (canReset(this.layer)) doReset(this.layer)}},
     ],
 
     // Upgrades, buyables, etc.
+    upgrades: {
+        11: {
+            title: "i11",
+            description: "row 0 layers now have a small effect",
+            cost: d(1),
+        },
+        12: {
+            title: "i12",
+            description: "multiply all row 0 layers gain by 2.22",
+            cost: d(1),
+        },
+        13: {
+            title: "i13",
+            description: "ignition resets boost everything before it",
+            cost: d(1),
+            effect() {
+                return inversetn(player.i.best.mul(0.544)).add(1)
+            },
+            effectDisplay() {return `x${format(upgradeEffect(this.layer, this.id))}`},
+        },
+        14: {
+            title: "i14",
+            description() {
+                if(hasMilestone('i', 2)) return "gain 20% of row 0 layers gain on reset per second, capping at 1000/s"
+                if(!hasMilestone('i', 2)) return "gain 10 spade, dia, heart and clover points per second"
+                return "if this shows up, contact erulure on discord"
+            },
+            cost: d(1),
+        },
+    },
+    clickables: {
+        11: {
+            title: "Respec",
+            description: "Respec your upgrades",
+            canClick() {return true},
+            onClick() {
+                if(!confirm("this will force an ignition reset, are you sure?")) return
+                player.i.points = player.i.best
+                player.i.upgrades = []
+                doReset('i', true)
+                layers.i.onPrestige()
+            },
+        }
+    },
+    milestones: {
+        1: {
+            requirementDescription: "First Ignition",
+            effectDescription: "Unlock 11 new upgrades for all row 0 layers. x3 all frag gain",
+            done() {return player.i.best.gte(1)}
+        },
+        2: {
+            requirementDescription: "Second Ignition",
+            effectDescription: "Autobuy all row 0 layers upgrades. i14 is improved",
+            done() {return player.i.best.gte(3)}
+        }
+    },
+    update(diff){
+        x = d(diff)
+        if(hasUpgrade('i', 14)) {
+            if(hasMilestone('i', 2)){
+                player.c.points = player.c.points.add(getResetGain('c').mul(0.2).min(1000).mul(diff))
+                player.d.points = player.d.points.add(getResetGain('d').mul(0.2).min(1000).mul(diff))
+                player.h.points = player.h.points.add(getResetGain('h').mul(0.2).min(1000).mul(diff))
+                player.s.points = player.s.points.add(getResetGain('s').mul(0.2).min(1000).mul(diff))
+            }
+            if(!hasMilestone('i', 2)){
+                player.c.points = player.c.points.add(x.mul(10))
+                player.d.points = player.d.points.add(x.mul(10))
+                player.h.points = player.h.points.add(x.mul(10))
+                player.s.points = player.s.points.add(x.mul(10))
+            }
+        }
+    }
 })
-*/

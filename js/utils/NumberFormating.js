@@ -56,7 +56,7 @@ function format(decimal, precision = 3, small) {
     }
     else if (decimal.gte("1e100000")) return exponentialFormat(decimal, 0, false)
     else if (decimal.gte("1e10000")) return exponentialFormat(decimal, 0)
-    else if (decimal.gte(1e4)) return exponentialFormat(decimal, precision)
+    else if (decimal.gte(1e6)) return exponentialFormat(decimal, precision)
     else if (decimal.gte(1e3)) return commaFormat(decimal, 0)
     else if (decimal.gte(0.0001) || !small) return regularFormat(decimal, precision)
     else if (decimal.eq(0)) return (0).toFixed(precision)

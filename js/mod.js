@@ -52,11 +52,15 @@ function getPointGain(x) {
 	let gain = d(1)
 	// wow this makes it easy for universal effects
 	if(hasUpgrade('c', 15)) gain = gain.mul(upgradeEffect('c', 15))
+	if(hasMilestone('i', 1)) gain = gain.mul(3)
 	if(x=='c') {
 		if(hasUpgrade('c', 11)) gain = gain.mul(3)
 		if(hasUpgrade('c', 17)) gain = gain.mul(4.4)
 		if(hasUpgrade('c', 18)) gain = gain.mul(upgradeEffect('c', 18))
 		if(hasUpgrade('c', 22)) gain = gain.mul(16)
+		if(hasUpgrade('c', 23)) gain = gain.mul(upgradeEffect('c', 23))
+		gain = gain.mul(layerEffect('c'))
+		if(hasUpgrade('i', 13)) gain = gain.mul(upgradeEffect('i', 13))
 		return gain
 	}
 	if(x=='d'){
@@ -64,6 +68,9 @@ function getPointGain(x) {
 		if(hasUpgrade('d', 17)) gain = gain.mul(4.4)
 		if(hasUpgrade('d', 18)) gain = gain.mul(upgradeEffect('d', 18))
 		if(hasUpgrade('d', 22)) gain = gain.mul(16)
+		if(hasUpgrade('d', 23)) gain = gain.mul(upgradeEffect('d', 23))
+		gain = gain.mul(layerEffect('d'))
+		if(hasUpgrade('i', 13)) gain = gain.mul(upgradeEffect('i', 13))
 		return gain
 	}
 	if(x=='h'){
@@ -71,6 +78,9 @@ function getPointGain(x) {
 		if(hasUpgrade('h', 17)) gain = gain.mul(4.4)
 		if(hasUpgrade('h', 18)) gain = gain.mul(upgradeEffect('h', 18))
 		if(hasUpgrade('h', 22)) gain = gain.mul(16)
+		if(hasUpgrade('h', 23)) gain = gain.mul(upgradeEffect('h', 23))
+		gain = gain.mul(layerEffect('h'))
+		if(hasUpgrade('i', 13)) gain = gain.mul(upgradeEffect('i', 13))
 		return gain
 	}
 	if(x=='s'){
@@ -78,6 +88,9 @@ function getPointGain(x) {
 		if(hasUpgrade('s', 17)) gain = gain.mul(4.4)
 		if(hasUpgrade('s', 18)) gain = gain.mul(upgradeEffect('s', 18))
 		if(hasUpgrade('s', 22)) gain = gain.mul(16)
+		if(hasUpgrade('s', 23)) gain = gain.mul(upgradeEffect('s', 23))
+		gain = gain.mul(layerEffect('s'))
+		if(hasUpgrade('i', 13)) gain = gain.mul(upgradeEffect('i', 13))
 		return gain
 	}
 	if(x=='j'){
@@ -142,4 +155,17 @@ function handlePointGain(diff){
 	player.dpoints = player.dpoints.add(getPointGain('d').mul(diff))
 	player.hpoints = player.hpoints.add(getPointGain('h').mul(diff))
 	player.spoints = player.spoints.add(getPointGain('s').mul(diff))
+}
+
+function tn(x){
+	return x.pow(2).add(x).div(2)
+}
+
+function inversetn(x){
+	return x.mul(8).add(1).sqrt().div(2).sub(0.5)
+	// god why does it have to be sqrt(8x+1)/2+0.5
+}
+
+function layerEffect(layer){
+	return tmp[layer].effect
 }
