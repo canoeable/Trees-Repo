@@ -312,10 +312,12 @@ VERSION.withoutName = "v" + VERSION.num + (VERSION.pre ? " Pre-Release " + VERSI
 VERSION.withName = VERSION.withoutName + (VERSION.name ? ": " + VERSION.name : "")
 
 
-function autobuyUpgrades(layer){
+function autobuyUpgrades(layer, over = false){
 	if (!tmp[layer].upgrades) return
+	x = tmp[layer].maxUpgBuy == undefined ? 999999 : tmp[layer].maxUpgBuy
+	if(over) x = 999999
 	for (id in tmp[layer].upgrades)
-		if (isPlainObject(tmp[layer].upgrades[id]) && (layers[layer].upgrades[id].canAfford === undefined || layers[layer].upgrades[id].canAfford() === true))
+		if (isPlainObject(tmp[layer].upgrades[id]) && (layers[layer].upgrades[id].canAfford === undefined || layers[layer].upgrades[id].canAfford() === true) && id <= x)
 			buyUpg(layer, id) 
 }
 

@@ -22,9 +22,11 @@ button {
 /* These are styles for different states of components. You can make layer-specific versions with .c.locked, for example */
 .locked {
 	cursor: not-allowed;
+	color: white;
+	background-color: #0f0f0f;
 }
 
-/* Can meens can be clicked/bought/etc */
+/* Can means can be clicked/bought/etc */
 .can {
 	cursor: pointer;
 	color: black;
