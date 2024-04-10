@@ -317,7 +317,7 @@ function autobuyUpgrades(layer, over = false){
 	x = tmp[layer].maxUpgBuy == undefined ? 999999 : tmp[layer].maxUpgBuy
 	if(over) x = 999999
 	for (id in tmp[layer].upgrades)
-		if (isPlainObject(tmp[layer].upgrades[id]) && (layers[layer].upgrades[id].canAfford === undefined || layers[layer].upgrades[id].canAfford() === true) && id <= x)
+		if (isPlainObject(tmp[layer].upgrades[id]) && (layers[layer].upgrades[id].canAfford === undefined || layers[layer].upgrades[id].canAfford() === true) && id <= x && !hasUpgrade(layer, id))
 			buyUpg(layer, id) 
 }
 
