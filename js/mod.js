@@ -16,7 +16,7 @@ let modInfo = {
 
 // Set your version in num and name
 let VERSION = {
-	num: "1.0",
+	num: "1.1",
 	name: "release thing idk",
 }
 
@@ -24,6 +24,8 @@ let changelog = `<h1>changelog:</h1><br>
 	<h3>version formatting</h3><br>
 	vA.B where A is the update number (only counts content updates) and B is the number of patches (bug fix updates) that have happened this update<br>
 	anyway heres the changelog<br><br>
+        <h3>v1.1</h3><br>
+	- fixed the bug where buy all may still reduce points if the upgrade is owned<br>
 	<h3>v1.0 - release thing idk</h3><br>
 	- made the game<br>
 	- endgame: 1000 coinz. 6 ignition points is theoretically possible with offline time, but 1000 coinz is officially endgame
